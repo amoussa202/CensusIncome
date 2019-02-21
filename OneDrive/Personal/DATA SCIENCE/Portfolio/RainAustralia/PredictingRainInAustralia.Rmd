@@ -1,0 +1,635 @@
+---
+title: 
+  RAIN IN AUSTRALIA - CLASSIFICATION PROBLEM
+  
+  *Will It Rain Tomorrow?*
+  
+
+  
+authors:
+  Ahmad Moussa, Karl Everett, Graham Ethier,  Rob Ness, Shashank Tripathi, Linda Ungar
+
+date: December 24, 2018
+
+output:
+  html_document:
+    toc: true
+    toc_depth: 2
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+
+
+
+*Version 1.0*
+
+
+
+
+__Group J:__
+
+__Graham Ethier,__
+__Karl Everett,__
+__Ahmad Moussa,__
+__Rob Ness,__
+__Shashank Tripathi,__
+__Linda Ungar__
+
+<P style="page-break-before: always">
+
+
+
+# ABSTRACT
+Our paper attempts to determine if Australia's primary agricultural region would receive a registerable amount of precipitation the following day.  Australia's geography, geographical location, and inherent diverse climates - yet predominantly hot dry summers and cold winters - present unique challenges to its cultivation communities, with broader influence on the country's economic prosperity.
+
+We built models to predict rain on the following day for  seven (7) cities in an agricultural zone classified as the "Pastoral Zone", where rain is least common and thus correctly predicting rain is of high utility. We found that rainy days were most highly correlated with higher levels of humidity at 3pm. The range precision of our models was respectable (78-85%), meaning that there is a high likelihood that days predicted to be rainy will be so, however the recall scores were only around 50%, meaning that these models will only predict rain for around 50% of all future rainy days. This suggests that additional features must be explored in order to reduce the number of false negatives of our models.
+
+
+# INTRODUCTION
+Agriculture plays a vital role in Australia. There are 85,681 agricultural businesses in Australia that have an Estimated Value of Agricultural Operations (EVAO) of $40,000 or greater. Out of the $58.1 billion worth of food and fibre Australian farmers produced in 2015-16, 77 per cent ($44.8 billion) was exported. SOURCE: ABARES, Agricultural Commodities - June Quarter 2017. Food and fibre exports represented 15.3% of Australia's total goods and services exports in 2015-16. SOURCE: ABARE, Australian Commodity Statistics, 2016 . 
+Australia's agricultural export commodities in 2015-16 were: 
+
+<center> ![](PieChart.png) </center>
+
+A notable characteristic of Australian farming and agricultural production is the extent to which net farm income varies from year to year. Australia's weather is subject to extreme fluctuations, which has an impact on annual production and ultimately on farm income and profitability.
+ 
+The distribution of agriculture production in Australia is largely determined by the physical environment and climate. Pastoral farming, in particular, dominates the most extensive area in Australia. An efficient irrigation system is necessary for any pastoral farms to provide sufficient amount of water consumption for their livestocks.
+
+The Department of Agriculture and Water Resources is continuously trying to improve its forecast on precipitation. As its first step, if the chance of rain can be predicted accurately, as soon as the next day, it will greatly benefit the pastoral farmers is being notified and take action accordingly.
+
+##Background
+
+Pastoral farming is a form of agriculture aimed at producing livestock, rather than growing crops. In Australia, dairy farming, raising beef cattle and raising sheep for wool are all considered as major pastoral farming activities.
+
+<center> ![](Map.png) </center>
+ 
+The pastoral zone, characterized by low rainfall, less fertile soils, and large scale pastoral activities involving the grazing of beef cattle and sheep for wool and mutton, is dominated in the north and west part of Australia. Two of the major issues faced by the pastoral farmers in this zone are drought and water security. The limited amount of precipitation over much of Australia exacerbates existing challenges to water availability and quality for agriculture. The storage capacity of reservoirs is heavily reliant upon rainfall. Efficient irrigation system/schedule is always the key to profitability to the pastoral farmers.
+
+In general, the pastoral system developed consists of low-density grazing of the natural vegetation (perennial grasses, shrubs and trees) with sheep and cattle. Much stock water is pumped from underground sources (artesian and sub-artesian) using pumps powered by wind. The low operating cost of wind pumps has enabled watering points to be strategically spaced, assisting preservation of rangeland vegetation. The regions carry most of the nation's 24 million beef cattle and about 22% of nation's 119 million sheep, representing an important breeding area for livestock. Individual properties, generally called stations, are large throughout the region, often exceeding 50,000 ha held under leasehold tenure from government. Firms with a number of stations move cattle by road transport between different holdings in various parts of the region, according to seasonal conditions. Mobility is a major feature of the pastoral farming system.
+
+##Business Needs
+
+The Department of Agriculture and Water Resources,which helps primary industries and producers to adapt and respond to climate change, is working closely with the Bureau of Meteorology, to provide pastoral farmers better weather forecast, specifically on precipitation, in order for farmers to efficiently operate their irrigation system, to ensure sufficient water supply of their herds. The first step is to improve its accuracy to predict on a daily basis whether the area is going to rain the next day, based on the weather observations that collected on the same day, as well as all the historical data.
+
+##Objective
+
+The objective of this project is to provide a recommended algorithm to predict whether or not it will rain tomorrow in the pastoral region by training a binary classification model. 
+The model will gives us 2 classes - either YES or NO. Different classifiers will be used to find the best model for this weather data.
+
+The CRISP-DM methodology will be applied as follows:
+* Business Understanding
+
+* Data Understanding
+
+* Data Preparation
+
+* Modeling
+
+* Evaluation
+
+* Deployment
+
+##Problem Statement
+Focusing on the pastoral zone in Australia by using the daily weather observations collected from numerous weather stations to predict the outcome if it is going to rain the next day. The ultimate goal is to utilize this predictive model to notify the pastoral farmers so they can efficiently manage their water supply and irrigation systems.
+
+##Business Success Criteria
+An accuracy of over 87%  and a precision of over 78% of this predictive analysis will be beneficial to all pastoral farmers in order to efficiently manage their irrigation systems, hence increases their profits by minimizing the operation cost due to water supply shortage.
+
+##Resources
+All six team members are responsible for this predictive analysis. R is the programming language used for this analysis.
+
+Dataset used in this analysis, is selected from  Kaggle (https://www.kaggle.com/jsphyg/weather-dataset-rattle-package),  consists of 10 years of daily weather observations collected through numerous weather stations across Australia.
+
+
+##Constraints & Risks
+
+High level project risks and constraints include, but are not limited to: 
+* Data Delivery
+
+* Data Access
+
+* Timeline - roughly 2 weeks are available for our team to work on this project from business understanding, to modeling and evaluation.
+
+* Big Data Expertise - The team does not have a lot of experience with Python/R, or much exposure to data mining techniques. In order to mitigate the risk, the team will consult with instructor Hashmat Rohian, as well as Teaching Assistant Ayaan Chaudhry at York University.
+
+##Assumptions
+The dataset used in this analysis were originally drawn from numerous weather stations in Australia, via Bureau of Meteorology's "real time" system. It is possible for erroneous values to be appeared in the dataset that used here.
+Locations in the Pastoral Zone (AliceSprings, Cobar, Darwin, Katherine, Mildura, Uluru, Woomera) are likely the true representatives of this extensive region. All these daily weather observations used here are available for the past 10 years, specifically from November 2007 to June 2017.
+Impact of other variables, such as the amount of rainfall, other broadarce zones and regions, is out of scope for this analysis. 
+
+#DATA PREPARATION
+
+##Data Understanding
+
+The data set was created to help predict the amount of rainfall in Australian cities any given day of the year. The amount of rainfall received is used as an indicator of economic well-being of people in places with industries that depend on rainfall such as agriculture, dairy etc. 
+
+The data set has 24 features and 142,193 instances. The features not only describe the amount of rainfall received but also the factors that impact rainfall. The data set has sufficient number of features and instances that it will help us build the model for predicting rainfall for the next day given the weather conditions.
+
+The data is structured as following: 
+
+
+###Input Variables:
+
++--------------------+-----------------------------------------------------------------------------------+
+| 1.  | Date         | The date of observation                                                           |
++--------------------+-----------------------------------------------------------------------------------+
+| 2.  | Location     | The common name of the location of the weather station                            |
++--------------------+-----------------------------------------------------------------------------------+
+| 3.  | MinTemp      | The minimum temperature in degrees  Celsius(°C)                                   |
++--------------------+-----------------------------------------------------------------------------------+
+| 4.  | MaxTemp      | The maximum temperature in degrees Celsius(°C)                                    |
++--------------------+-----------------------------------------------------------------------------------+
+| 5.  | Rainfall     | The amount of rainfall recorded for the day in mm                                 |
++--------------------+-----------------------------------------------------------------------------------+
+| 6.  | Evaporation  | The so-called Class A pan evaporation (mm) in the 24 hours to 9am                 |
++--------------------+-----------------------------------------------------------------------------------+
+| 7.  | Sunshine     | The number of hours of bright sunshine in the day                                 |
++--------------------+-----------------------------------------------------------------------------------+
+| 8.  | WindGustDir  | The direction of the strongest wind gust in the 24 hours to midnight              |
++--------------------+-----------------------------------------------------------------------------------+
+| 9.  | WindGustSpeed| The speed (km/h) of the strongest wind gust in the 24 hours to midnight           |
++--------------------+-----------------------------------------------------------------------------------+
+| 10. | WindDir9am   | Direction of the wind at 9am                                                      |
++--------------------+-----------------------------------------------------------------------------------+
+| 11. | WindDir3pm   | Direction of the wind at 3pm                                                      |
++--------------------+-----------------------------------------------------------------------------------+
+| 12. | WindSpeed9am | Wind speed (km/hr) averaged over 10 minutes prior to 9am                          |
++--------------------+-----------------------------------------------------------------------------------+
+| 13. | WindSpeed3pm | Wind speed (km/hr) averaged over 10 minutes prior to 3pm                          |
++--------------------+-----------------------------------------------------------------------------------+
+| 14. | Humidity9am  | Humidity (percent) at 9am on a scale of 1- 100                                    |
++--------------------+-----------------------------------------------------------------------------------+
+| 15. | Humidity3pm  | Humidity (percent) at 3pm on a scale of 1- 100                                    |
++--------------------+-----------------------------------------------------------------------------------+
+| 16. | Pressure9am  | Atmospheric pressure (hpa) reduced to mean sea level at 9am                       |
++--------------------+-----------------------------------------------------------------------------------+
+| 17. | Pressure3pm  | Atmospheric pressure (hpa) reduced to mean sea level at 3pm                       |
++--------------------+-----------------------------------------------------------------------------------+
+| 18. | Cloud9am     | Fraction of sky obscured by cloud at 9am. This is measured in "oktas", which are a unit of eigths. It records how many eigths of the sky are obscured by cloud. A 0 measure indicates completely clear sky whilst an 8 indicates that it is completely overcast                                |
++--------------------+-----------------------------------------------------------------------------------+
+| 19. | Cloud3pm     | Fraction of sky obscured by cloud (in "oktas": eighths) at 3pm. See Cload9am for a description of the values                                                                                |
++--------------------+-----------------------------------------------------------------------------------+
+| 20. | Temp9am      | Temperature (degrees C) at 9am                                                    |
++--------------------+-----------------------------------------------------------------------------------+
+| 21. | Temp3pm      | Temperature (degrees C) at 3pm                                                    |
++--------------------+-----------------------------------------------------------------------------------+
+| 22. | RainToday    | Boolean: 1 if precipitation (mm) in the 24 hours to 9am exceeds 1mm, otherwise 0  |
++--------------------+-----------------------------------------------------------------------------------+
+| 23. | RISK_MM      | The amount of rain in Millimetre. A kind of measure of the "risk"                 |
++--------------------+-----------------------------------------------------------------------------------+
+
+	
+
+###Output Variable:
+
++--------------------+--------------------------------------------------------------------------------------+
+| RainTomorrow       | The target variable. Did it rain tomorrow? Yes(1)/(0)No indicator of predicted value |
++--------------------+--------------------------------------------------------------------------------------+
+
+
+
+##Getting the Data
+
+```{r,warning=FALSE,message=FALSE}
+#In order to work on the dataset, several libraries are required to be imported
+library(dplyr)
+library(ggplot2)
+library(psych)
+library(GGally)
+library(rpart)
+library(rpart.plot)
+library(randomForest)
+library(tidyverse)
+library(mlr)
+library(caret)
+library(class)
+library(e1071)
+
+#To make the output file cleaner and free from warnings
+options(warn = -1)
+
+#Retrieve the original data
+weather_data <- read.csv('weatherAUS.csv', stringsAsFactors = FALSE)
+
+#Change the Date variable to Date format
+weather_data$Date <- as.Date(weather_data$Date)
+
+```
+
+
+##Data Cleaning
+
+In order to narrow down to the cities that would address our business problem, the cities were manually mapped to Key agriculture zones using the following reference table:
+
+<center> ![](DataPrep.png) </center>
+
+
+
+```{r}
+#Delete the rows were missing data is too little
+weather_data <- filter(weather_data, !is.na(weather_data$MinTemp))
+weather_data <- filter(weather_data, !is.na(weather_data$MaxTemp))
+weather_data <- filter(weather_data, !is.na(weather_data$Rainfall))
+weather_data <- filter(weather_data, !is.na(weather_data$Temp9am))
+weather_data <- filter(weather_data, !is.na(weather_data$Temp3pm))
+weather_data <- filter(weather_data, !is.na(weather_data$RainToday))
+weather_data <- filter(weather_data, !is.na(weather_data$WindDir3pm))
+weather_data <- filter(weather_data, !is.na(weather_data$WindSpeed9am))
+weather_data <- filter(weather_data, !is.na(weather_data$WindSpeed3pm))
+weather_data <- filter(weather_data, !is.na(weather_data$Humidity9am))
+weather_data <- filter(weather_data, !is.na(weather_data$Humidity3pm))
+weather_data <- filter(weather_data, !is.na(weather_data$WindGustDir))
+weather_data <- filter(weather_data, !is.na(weather_data$WindGustSpeed))
+weather_data <- filter(weather_data, !is.na(weather_data$WindDir9am))
+
+#Choose the cities we are interested in
+weather_data <- filter(
+  weather_data,
+  Location %in% c('AliceSprings', 'Cobar', 'Darwin', 'Katherine', 'Mildura', 'Uluru', 'Woomera')
+  )
+
+
+#Given that weather metrics fluctuate a lot from day to day, we will delete the columns with lots of missing data (more than 5,000).After that we will remove any rows with any missing data. The result is stored in "weather_data_dropped"
+colSums(is.na(weather_data))>5000
+weather_data_dropped <- weather_data[colSums(is.na(weather_data))<2000]
+weather_data_dropped <- weather_data_dropped[rowSums(is.na(weather_data_dropped))==0,]
+
+
+#Moving some features to Factors
+apply(weather_data_dropped,2, function(x) length(unique(x)))
+
+cols<-c("RainToday","RainTomorrow", "Location", "WindGustDir", "WindDir9am", "WindDir3pm")
+for (i in cols){
+  weather_data_dropped[,i] <- as.factor(weather_data_dropped[,i])
+}
+```
+
+## Exploratory Data Analysis
+
+```{r}
+print(summary(weather_data_dropped$RainTomorrow))
+print(mean(weather_data_dropped$RainTomorrow=='Yes'))
+
+```
+Rainy days make only 12.8% of all the days in the dataset.
+
+
+Here we view various plots to better understand the relationships between various variables.
+```{r}
+#RainToday & RainTomorrow
+
+ggplot(data = weather_data_dropped)+
+  geom_bar(aes(x = RainToday,fill = RainTomorrow),position = 'dodge')+
+  facet_wrap(~Location)+
+  labs(title = "RainToday & RainTomorrow")
+#We notice that there is a relationship between RainToday and RainTomorrow. If the 
+
+ggplot(weather_data_dropped)+
+  geom_point(aes(x = Rainfall, y=RISK_MM))+
+  geom_smooth(aes(x = Rainfall, y=RISK_MM))+
+  facet_wrap(~Location)+
+  ylim(0,100)+
+  xlim(0,100)+
+  labs(title= "Rainfall vs RISK_MM")
+
+
+```
+
+Sunny days follow rainy days the majority of the time for all cities apart from Darwin, where a rainy day is more likely to be followed by another rainy one than a sunny one on average.
+
+The amount of rainfall on a given day is not highly correlated with the rainfall of the following day, likely because most rainy days are followed by sunny days except for in Darwin.
+
+```{r}
+#MinTemp and RainTomorrow
+ggplot(data = weather_data_dropped)+
+  geom_boxplot(aes(x = RainTomorrow, y = MinTemp))+
+  facet_wrap(~Location)+
+  labs(title = "MinTemp & RainTomorrow")
+
+#MaxTemp and RainTomorrow
+ggplot(data = weather_data_dropped)+
+  geom_boxplot(aes(x = RainTomorrow, y = MaxTemp))+
+  facet_wrap(~Location)+
+  labs(title = "MaxTemp & RainTomorrow")
+```
+
+It seems that on average, a slightly higher minimum and a slightly lower maximum temperature are associated with rainy days for most of the cities. The range of both minimum and maximum daily temperatures is much narrower for Katherine and especially Darwin.
+
+```{r}
+#Analyze the WindDirection
+ggplot(weather_data_dropped)+
+  geom_bar(aes(x = WindGustDir, fill = RainTomorrow ), position = 'dodge', na.rm=TRUE)+
+  facet_wrap(~Location)+
+  coord_flip()+
+  ylim(0,150)+
+  labs(title = "WindGustDir & RainTomorrow")
+
+#We can see that the wind direction impacts weather the next day is Rainy or not.
+#However, which wind direction impacts the rain probability varies for each Location
+```
+Clearly there is variation between wind gust direction the the probability of rain the following day, but the relationships vary by location (as might be expected), especially for Darwin since it has the most rainy days. Because there are so many wind directions though, each on individually might not have the high predictive value.
+
+
+```{r}
+#Now Checking WindGustSpeed
+ggplot(weather_data_dropped)+
+  geom_boxplot(aes(x = RainTomorrow, y = WindGustSpeed))+
+  facet_wrap(~Location)+
+  labs(title = "WindGustSpeed & RainTomorrow")
+#WindGustSpeed  seems to have a small effect. Almost all Rainy days were preceded by relatively stronger wind
+```
+It appears that rainy days are preceeded by days with slightly stronger wind gust speeds than non-rainy days, on average.
+
+```{r}
+#Pressure vs RISK_MM
+ggplot(weather_data_dropped)+
+  geom_boxplot(aes(x = RainTomorrow, y = Pressure9am))+
+  facet_wrap(~Location)+
+  labs(title = "Pressure9am vs RainTomorrow")
+
+ggplot(weather_data_dropped)+
+  geom_boxplot(aes(x = RainTomorrow, y = Pressure3pm))+
+  facet_wrap(~Location)+
+  labs(title = "Pressure3pm vs RainTomorrow")
+```
+For all locations, lower pressure is associated with rain tomorrow and this trend is consistant and similar in magnitude for measures at 9am and measures at 3pm.
+
+
+##Variables Encoding
+
+```{r}
+#Encoding RainTomorrow
+weather_data_dropped <- weather_data_dropped %>%
+  mutate(
+    RainTomorrow = as.numeric(RainTomorrow=='Yes')
+  )
+```
+
+Creating a heatmap to show the correlation between the various numeric variables.
+```{r}
+nums<- unlist(lapply(weather_data_dropped, is.numeric))
+
+cormat <- round(cor(weather_data_dropped[ , nums]),2)
+library(reshape2)
+melted_cormat <- melt(cormat)
+ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) + 
+  geom_tile()+
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+As might be expected, measures taken at 9am versus 3pm are highly correlated and humidity at 3pm is the most highly correlated with rain tomorrow.
+
+
+Encoding the remaining categorical variables (WindGustDir, WindDir9am and WindDir3pm)
+```{r}
+dummies <- createDummyFeatures(weather_data_dropped, cols = c("WindGustDir","WindDir9am","WindDir3pm"))
+
+weather_data_dropped <- dummies %>%
+  mutate(
+    RainToday = as.numeric(RainToday=='Yes')
+  )
+```
+##Normalizing data
+```{r}
+preObj <- preProcess(weather_data_dropped[, -17], method=c("center", "scale"))
+normalized_df <- predict(preObj, weather_data_dropped[, -17])
+
+normalized_df["RainTomorrow"] <- weather_data_dropped$RainTomorrow
+```
+
+
+
+
+#MODELING
+
+Given that weather can vary from one city to another, we will run the models separately for each city.
+Since we will be doing a classification assessment based on RainTomorrow, we will exclude RISK_MM from the model. We will be using Rainfall, hence RainToday is not required.
+```{r}
+#Retrieve the list of locations to use in the loop
+locations <- weather_data_dropped %>%
+  distinct(Location)
+
+#Creating dataframes to store the results of the models for evaluation:
+#res_lr:  for Logistic regression
+#res_dt:  for Decision Trees
+#res-svm: for SVM
+res_lr<- data.frame(Location = locations, Precision_rf = 0, Recall_rf = 0,F1Score_rf=0, Accuracy_rf=0)
+res_dt<- data.frame(Location = locations, Precision_rf = 0, Recall_rf = 0,F1Score_rf=0, Accuracy_rf=0)
+res_svm<- data.frame(Location = locations, Precision_rf = 0, Recall_rf = 0,F1Score_rf=0, Accuracy_rf=0)
+imp_variables <- data.frame(Location = locations)
+
+
+for (loc in 1:nrow(locations)){
+  
+  #Omit unnecessary variables from the modeling
+  train_im <- subset(normalized_df,Location == locations[loc,],!names(normalized_df) %in% c("Location", "RISK_MM", "RainToday", "Date"))
+  train_im$RainTomorrow <- as.character(train_im$RainTomorrow)
+  train_im$RainTomorrow <- as.factor(train_im$RainTomorrow)
+  
+  #Create a random sample contaiing 70% of the data to be used to traing the models. The remaining 30% will be used for testing
+  ind<-sample(1:dim(train_im)[1],dim(train_im)[1]*0.7) # Sample of 70% out of weather_data_dropped
+   
+  train <- train_im[ind,] # The train set of the model
+  test <- train_im[-ind,] # The test set of the model
+
+  
+  ###################################################
+  #RainForest modeling will be used for Variable selection only. Important variables will be used by Log regression, Decisoin   Trees, and SVM
+  ###################################################
+  model_rf<-randomForest(RainTomorrow ~.,data=train_im, method = "class", ntree = 200 )
+  
+  #retrieve important variables, and store them in "columns" 
+  feat_imp_df <- importance(model_rf) %>% 
+    data.frame() %>% 
+    mutate(feature = row.names(.))%>%
+    filter(
+      MeanDecreaseGini > 10
+    )
+  columns = feat_imp_df$feature
+  columns <- c(columns,'RainTomorrow')
+  
+  
+  #Prepare new Training and Testing datasets that only include important variables.
+  train_im <- subset(normalized_df,TRUE,names(normalized_df) %in% columns) 
+  
+  
+  #Generating Train/Test
+  ind<-sample(1:dim(train_im)[1],dim(train_im)[1]*0.7) # Sample of 70% out of weather_data_dropped
+  
+  train<-train_im[ind,] # The train set of the model
+  test<-train_im[-ind,] # The test set of the model
+  
+  
+  ###################################################
+  #Logistic Regression based on Variables generated by RF
+  ###################################################
+  model <- glm(RainTomorrow ~.,family=binomial(link='logit'),data=train)
+  
+  #Retrieve the statistically significant variables and store them in res_lr$Significant_lr
+  toselect.x <- summary(model)$coeff[-1,4] < 0.001
+  relevant.x <- names(toselect.x)[toselect.x == TRUE] 
+  res_lr[loc,'Significant_lr'] <- paste(relevant.x,sep = ", ", collapse = ", ")
+ 
+  # The prediction of this model on the test set:
+  pred <- predict(model,test)
+  pred <- ifelse(pred > 0.5,1,0)
+  
+  #Generate the evaluation rates(Accuracy, Precision, recall and F1-Score), and store them in the results table (res_dt)
+  
+  #Accuracy
+  res_lr[loc,'Accuracy_lr'] <- mean(pred==test$RainTomorrow)
+  
+  # Precision and recall
+  t1<-table(pred,test$RainTomorrow)
+  precision<- t1[2,2]/(sum(t1[2,]))
+  recall<- t1[2,2]/(sum(t1[,2]))
+  res_lr[loc,'Precision_lr'] <- precision
+  res_lr[loc,'Recall_lr'] <- recall
+  # F1 score
+  F1<- 2*precision*recall/(precision+recall)
+  res_lr[loc,'F1Score_lr'] <- F1
+  
+  ###################################################
+  #Decision Tree based on Variables generated by RF
+  ###################################################
+  model_dt<- rpart(RainTomorrow ~.,data=train, method="class")
+  rpart.plot(model_dt, main = locations[loc,])
+  
+  # The prediction of this model on the test set:
+  pred <- predict(model_dt,test,type = "class")
+  
+  #Generate the evaluation rates(Accuracy, Precision, recall and F1-Score), and store them in the results table (res_dt)
+  
+  #Accuracy
+  res_dt[loc,'Accuracy_dt'] <- mean(pred==test$RainTomorrow)
+  
+  # Precision and recall
+  t2<-table(pred,test$RainTomorrow)
+  presicion_dt <- t2[2,2]/(sum(t2[2,]))
+  recall_dt <- t2[2,2]/(sum(t2[,2]))
+  res_dt[loc,'Precision_dt'] <- presicion_dt
+  res_dt[loc,'Recall_dt'] <- recall_dt
+  # F1 score
+  F1_dt<- 2*presicion_dt*recall_dt/(presicion_dt+recall_dt)
+  res_dt[loc,'F1Score_dt'] <- F1_dt
+  
+
+  ###################################################
+  #Support Vector Machines (SVM)
+  ###################################################
+   model_svm <- svm(RainTomorrow ~.,data=train, scale = FALSE, na.action = na.omit)
+
+
+  # The prediction of this model on the test set:
+  pred <- predict(model_svm,test)
+  pred <- ifelse(pred > 0.5,1,0)
+  
+  #Generate the evaluation rates(Accuracy, Precision, recall and F1-Score), and store them in the results table (res_svm)
+  
+  #Accuracy
+  res_svm[loc,'Accuracy_svm'] <- mean(pred==test$RainTomorrow)
+ 
+  # Precision and recall
+  t4<-table(pred,test$RainTomorrow)
+  precision<- t4[2,2]/(sum(t4[2,]))
+  recall<- t4[2,2]/(sum(t4[,2]))
+  res_svm[loc,'Precision_svm'] <- precision
+  res_svm[loc,'Recall_svm'] <- recall
+  
+  # F1 score
+  F1 <- 2*precision*recall/(precision+recall)
+  res_svm[loc,'F1Score_svm'] <- F1
+}
+
+
+```
+
+#EVALUATION
+
+We can see that various cities have different outcomes and different important variables. Humidity3pm, WindGustSpeed, Temp3pm, Pressure3pm, WindSpeed3pm and MinTemp are are mostly used. The below tables compare the various rates for the three models:
+
+```{r}
+res_total <- bind_cols(res_lr,res_dt,res_svm)
+
+#Accuracy measures the percentage of correct predictions(True Positives + True Negatives)
+res_total[,c('Location','Accuracy_lr','Accuracy_dt','Accuracy_svm')]
+
+#Precision measures the percentage of True Positives out of all the observations that we predicted to be Positive. I.e. out of the days that were precdicted to rain, how many days were truly rainy (TP / (TP + FP)).
+res_total[,c('Location','Precision_lr','Precision_dt','Precision_svm')]
+
+#Recall measures the prercentage of True Positives out of all the Actually positive observations. I.e. how many rainy days have we predicted successfully (TP / (TP + FN)).
+res_total[,c('Location','Recall_lr','Recall_dt','Recall_svm')]
+
+#F1-Score is a combination of Precision and Recall.
+res_total[,c('Location','F1Score_lr','F1Score_dt','F1Score_svm')]
+
+```
+
+The major findings are:
+1. Logistic Regression provides the most precise predictions, but recall was highest for SVM-based models.
+
+2. Accuracy ranged between 91% and 92%, however this is is mainly driuven by correctly predicting non-rainy days which are far more common (87% of days are non-rainy overall).
+
+3. Precision ranged between 80% and 83%, meaning that there is a high likelihood that days predicted to be rainy will in fact be so.
+
+4. Recall is low (41-56%), suggesting that the model will miss around half of all rainy days. This suggests that the amount of variation explained by our predictors is limited and that the model has scope to be improved by more strongly predictive features.
+
+5. This is the list of variables that are most statistically significantly associated with rain tomorrow for each location.
+
+
+```{r}
+res_lr[,c('Location','Significant_lr')]
+```
+
+
+#DEPLOYMENT
+
+The current model has uses for those interested parties as it does allow them to make the necessary changes if there is going to be rain. Given that there is such scarcity of water in the pastoral region any information of how farmers will provide for their herds is beneficial to them. However, where the model falls short is that it is only providing a yes or no classification to if it going to be raining tomorrow. It does not provide any indication of the amount of rainfall which is critically important to farmers within the pastoral zone. There are some companies with cattle herds in excess of 500,000 cattle the amount of rainfall must be enough to offset the costs associated with moving herds to the area where it will rain. Therefore, allowing the farmers to be able to judge based on amount of rainfall rather than if there is going to be rain would be a necessary next step in the development of this model. In further development of the model providing prediction based on specific cities rather than the entirety of the pastoral region will also rived a marked increase in the usefulness of the model towards interested parties. This is due to the pastoral region that the model covers being larger than many countries. It is unrealistic to believe that farmers can simply move their herds from one side of the region to the other even if they know there will be rain. Providing more location specific data rather than region specific data would mean more benefits towards the farmers who would be using this information.
+ 
+The most apt way to deploy the model would be through the current means by which the Bureau of Meteorology distributes information to Australians. The Bureau of Meteorology has a smartphone app which could be adjusted to send alerts to every device within the pastoral zone that it is installed upon on if it is going to rain once the necessary data for the previous day has been collected. For those farmers within the pastoral region who do not have access to the internet or a smartphone the only other viable means to deploy the data for their benefit is through the radio. The Bureau of Meteorology currently uses VHF radio for broadcasting maritime weather. By informing those within in the pastoral zone of if it will rain the next day using the same technology that the maritime weather system uses means that farmers would not need access to the internet, only a VHF radio. Having multiple methods to deploy the data means there are safety mechanisms in place if one method is faulty and cannot provide the necessary data.
+ 
+Any other weather data that could affect rainfall needs to be collected ranges from long term weather phenomena such as the the El Niño-Southern Oscillation, which can affect rain during certain times of the year. Furthermore, more historical data from the individual weather stations themselves would be incredibly helpful in order to better train the model. Additionally, if there was more data associated with individual weather stations there would be more confidence in providing localized weather predictions rather than for the whole pastoral region. Finally, if the weather stations could expand upon their measurement of the amount of rainfall recorded through the day the model could be further expanded. Rather than simply saying a yes or no classification with regards to if it will rain answering a question related to how much rain there will be would be even more useful to the farmers within the pastoral region as it simply offers more detailed information which they can base their decisions on.
+ 
+The data the model would be using needs to be updated daily given that the model will be receiving new data from each relevant weather station every day. However, the model itself should not need to be updated often given that even in an Earth impacted by global warming the long-term changes that could impact the viability of the model will happen gradually thereby allowing the model to also slowly adjust. If there were major environmental or meteorological events which occurred that would affect the accuracy of the model, these would have to be taken into consideration in terms of both they will impact rainfall as well as how long these events would last. However, given that the model should be providing more accurate prediction with more data the longer this model is used the less likely the change that there would need to be significant changes to the model.
+
+
+#CONCLUSION
+As expected, rainy days were uncommon in this region. We found that future rainy days were, on average, associated with higher minimum daily temperatures, lower maximum daily temperatures and most highly correlated with higher levels of humidity at 3pm. Most of these trends were consistant across all seven locations, however Darwin differed from the rest of the cities in that it was the only location for which a second consecutive rainy day was more likely to follow a rainy day as opposed to being followed by a day on which it doesn't rain.
+
+Logistic regression models performed best in terms of precision versus decision trees and support vector machines. Accuracy was high but this is expected since non-rainy days are very common and thus predictions of no rain are likely to be correct. The range of precision for our logistic regression models was respectable, meaning that users of the models can have a high degree of confidence that a predicted rainy day will in fact be rainy, however the models only captured around 50% of all rainy days which means that our features are not as highly predictive of future rain as they could be and that additional features, or a different combination of them, may lead to improved recall and thus fewer false negatives.
+
+
+
+#SOURCES & ACKNOWLEDGEMENTS
+* Observations were drawn from numerous weather stations. The daily observations are available from http://www.bom.gov.au/climate/data. Copyright Commonwealth of Australia 2010, Bureau of Meteorology.
+
+* Definitions adapted from http://www.bom.gov.au/climate/dwo/IDCJDW0000.shtml
+
+* This dataset is also available via the R package rattle.data and at https://rattle.togaware.com/weatherAUS.csv. Package home page: http://rattle.togaware.com. Data source: http://www.bom.gov.au/climate/dwo/ and http://www.bom.gov.au/climate/data.
+
+* Introduction sourced from <https://www.nationsencyclopedia.com/economies/Asia-and-the-Pacific/Australia-AGRICULTURE.html>
+
+* Pastoral zone definition: http://apps.daff.gov.au/agsurf/regions.html
+
+* https://www.agric.wa.gov.au/climate-change/climate-change-and-pastoral-industry
+
+* Farm Facts 2011 (http://www.nff.org.au/farm-facts.html) 
+
+* Agricultural Statistics <http://www.abs.gov.au/websitedbs/c311215.NSF/ 22b99697d1e47ad8ca2568e30008e1bc/8cc>
+
+* Research on Rainfalls for different key agriculture regions <https://www.researchgate.net/figure/a-Key-agriculture-regions-in-Australia-and-b-major-climate-classification-groups_fig1_258192559>
+
+* Farming Systems in Australia: <http://www.fao.org/docrep/article/agrippa/686_en.pdf>
+
+
+
+
+
+
+
